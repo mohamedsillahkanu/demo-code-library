@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage with Sidebar</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+
+<div class="container">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://raw.githubusercontent.com/numalariamodeling/snt-library/00f5d017420687693cc53237562750b8abfba6ed/numalaria_logo.png" alt="Logo" class="sidebar-logo">
+            <h2 class="sidebar-title">My Project</h2>
+        </div>
+        <input type="text" class="search-bar" placeholder="Search..." maxlength="15"> <!-- Shortened search bar -->
+        <div class="menu">
+            <p class="menu-header" onclick="toggleMenu(this)"><span class="menu-text">Overview</span></p>
+            <ul class="submenu">
+                <li><a href="#" class="menu-link" onclick="loadContent('overview')"><span class="link-text">Overview</span></a></li>
+            </ul>
+        </div>
+        <div class="menu">
+            <p class="menu-header" onclick="toggleMenu(this)"><span class="menu-text">Menu 1</span></p>
+            <ul class="submenu">
+                <li><a href="#" class="menu-link" onclick="loadContent('page1')"><span class="link-text">Page 1</span></a></li>
+                <li><a href="#" class="menu-link" onclick="loadContent('page2')"><span class="link-text">Page 2</span></a></li>
+            </ul>
+        </div>
+        <div class="menu">
+            <p class="menu-header" onclick="toggleMenu(this)"><span class="menu-text">Menu 2</span></p>
+            <ul class="submenu">
+                <li><a href="#" class="menu-link" onclick="loadContent('quartoExample')"><span class="link-text">Quarto Example</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-content">
+        <div id="content">
+            <!-- Overview content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script> <!-- Link to the JavaScript file -->
+</body>
+</html>
