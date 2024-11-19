@@ -1,0 +1,107 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "2023 Faculty Enrichment Program in Applied Malaria Modeling",
+    "section": "",
+    "text": "Malaria burden remains high in Sub-Saharan Africa despite two decades of intense intervention. Regular analysis and use of public health data will lead to more effective control through evidence-based decision making.\nOur long-term goal is to train a critical mass of modeling scientists who are:\n\n\n\n\n\n\n1. Retained within Sub-Saharan Africa\n\n\n\n\n\n\n\n\n\n\n\n\n2. Training the next generation of modelers\n\n\n\n\n\n\n\n\n\n\n\n\n3. Working closely with local malaria control programs to provide operational support\n\n\n\n\n\n\n\n\n\n\n\n\n4. Competitive in obtaining grants from international funding agencies\n\n\n\n\n\n\n\n\n\n\n\n\n5. Closely networked with each other across Africa and with international partners\n\n\n\n\n\n\nTo help achieve this goal, Northwestern University’s malaria modeling team is offering an 18-week intensive in-person training program in applied malaria modeling for Sub-Saharan African mathematical modeling faculty - with or without public health backgrounds - tailored to their experience and needs.\nTraining is focused on applied modeling with EMOD, an open-source malaria transmission modeling software that is currently used to support malaria programs. Participants will design their own research question and focal training project using EMOD that will form the basis of a Specific Aims page (grant proposal summary page) to be developed during the program. Program highlights include:\n\n\n\n\n\n\n1. Multi-modal training in applied malaria modeling\n\n\n\nHands-on tutorials and exercises focused on model configuration and analysis, supplemented by lectures and journal clubs, to enable participants to independently carry out their focal projects. Participants will run models on Northwestern’s high performance computing cluster.\n\n\n\n\n\n\n\n\n2. Training in written and oral scientific communication\n\n\n\nIterative revisions of written Specific Aims and oral presentations, with feedback from program director, peers, and other Northwestern modelers.\n\n\n\n\n\n\n\n\n3. Dedicated mentorship\n\n\n\nWeekly 1-on-1 meetings with program director and an assigned partner from Northwestern’s team of modelers.\n\n\n\n\n\n\n\n\n4. Building connections with a global community of malaria modelers\n\n\n\nMembership and participation in the Applied Malaria Modeling Network (AMMnet); connections with faculty enrichment program alumni; attendance at the American Society of Tropical Medicine & Hygiene (ASTMH) 2023 Annual Meeting in Chicago"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "How-Tos.html",
+    "href": "How-Tos.html",
+    "title": "Help",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "help.html",
+    "href": "help.html",
+    "title": "Help",
+    "section": "",
+    "text": "The demographics file is a required input file for EMOD that specifies characteristics of the population in a simulation. This includes aspects like the population size, birth rates, non-malaria mortality rates, age structure, initial prevalence, and more. Full documentation on the demographics file can be found here.\nAt least one demographics file is required for every simulation unless you set the parameter Enable_Demographics_Builtin to 1 (one) in the configuration file. This setting does not represent a real location and is generally only used for testing and validating code.\nFor many applications, users often will reuse a standard demographics file and make modifications by hand or by script. In more complex simulations, creating a demographics file from scratch may be needed.\n\n\n\nParts of demographics file\n\nA demographics file is a JSON file organized into 4 main sections:\n\nMetadata\nNodeProperties\nDefaults\n\nParameters applied to all nodes in the simulation\n\nNodes: each node is a simulated location. Transmission within a node is well-mixed, and nodes are connected by human and/or vector migration.\n\nAllows node-specific parameters\nSpecified parameters override values in ‘Defaults’\n\n\n# Structure of Demographics File for a simulation with 1 node\n  {\n     \"Metadata\": {\n          \"DateCreated\": \"dateTime\",\n          \"Tool\": \"scriptUsedToGenerate\",\n          \"Author\": \"author\",\n          \"IdReference\": \"Gridded world grump2.5arcmin\",\n          \"NodeCount\": \"1\"\n     },\n     \"NodeProperties\": [\n          {...}\n     ],\n     \"Defaults\": {\n          \"NodeAttributes\": {\n            ...\n            \"BirthRateSource\": \"World Bank\",\n            \"CountryBirthRate\": 31.047,\n            \"World Bank Year\": \"2016\",\n            ...\n          },\n          \"IndividualAttributes\": {...},\n          \"IndividualProperties\": {...}\n     },\n     \"Nodes\": [{\n          \"NodeID\": 1,\n          \"NodeAttributes\": {\n            \"BirthRate\": 0.1190,\n            \"InitialPopulation\": 1400,\n            \"Village\": \"Obom\"\n          },\n          \"IndividualAttributes\": {...},\n          \"IndividualProperties\": {...}\n     }]\n  }\n\n\n\n\n\nCreating a demographics file\n\nFirst, create a file “my_node.csv” with the following columns:\n\n\n\n\n\n\n\nRequired\noptional\n\n\n\n\nnodeid (unique # >0)\nOther node-specific variables, if any, such as village name, latitude, and logitude\n\n\npopulation (starting size)\n\n\n\n\nExample:\n\n\n\nnodeid\npopulation\nVillage\nlat\nlon\n\n\n\n\n1\n1000\n“Obom”\n5.760759\n-0.4473415\n\n\n\nIn EMODpy, we generate the demographics file for each simulation using a standard build_demog() function.\ndef build_demog():\n    \"\"\"\n    This function builds a demographics input file for the DTK using emod_api.\n    \"\"\"\n    \n    # From template node #\n    ######################\n    # This snippet allows you to manually specify the node details instead of using a .csv\n#    demog = Demographics.from_template_node(lat=1, lon=2, pop=1000, name=\"Example_Site\")\n\n    # From input file csv #\n    #######################\n    demog = Demographics.from_csv(input_file = os.path.join(<path_to_file>,\"my_node.csv\"),\n                                  id_ref=\"indie_clusters\", \n                                  init_prev = 0.01, \n                                  include_biting_heterogeneity = True)\n    \n    demog.SetEquilibriumVitalDynamics()\n    age_distribution = Distributions.AgeDistribution_SSAfrica\n    demog.SetAgeDistribution(age_distribution)\n\n    return demog\n\n\n\n\n\n\n\n\n1. Generate Demographics\n\nTo run simultaneous simulations in multiple nodes, create an input file “my_nodes.csv” with one row for each node.\nEx. “my_nodes.csv”\n\n\n\nnodeid\nlat\nlon\npopulation\n\n\n\n\n1\n12.11\n-1.47\n1000\n\n\n2\n12.03\n-1.44\n1000\n\n\n3\n12.13\n-1.59\n1000\n\n\n17\n12.06\n-1.48\n1000\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\nNode IDs must be positive whole numbers, but do not have to be sequential\nlat/lon values should represent real places with climates suitable for malaria transmission (if weather files are generated from demographics)\n\n\n\nThen, you can generate demographics for each node in every simulation, by adding this code to build_demog()\ndef build_demog():\n    \"\"\"\n    This function builds a demographics input file for the DTK using emod_api.\n    \"\"\"\n    \n    # From template node #\n    ######################\n    # This snippet allows you to manually specify the node details instead of using a .csv\n#    demog = Demographics.from_template_node(lat=1, lon=2, pop=1000, name=\"Example_Site\")\n\n    # From input file csv #\n    #######################\n    demog = Demographics.from_csv(input_file = os.path.join(<path_to_file>,\"my_nodes.csv\"),\n                                  id_ref='spatial_example', \n                                  init_prev = 0.01, \n                                  include_biting_heterogeneity = True)\n    \n    demog.SetEquilibriumVitalDynamics()\n    age_distribution = Distributions.AgeDistribution_SSAfrica\n    demog.SetAgeDistribution(age_distribution)\n\n    return demog\n\n\n\n\n\n2. Set Node-Specific Parameters\n\nSometimes we want to vary properties between nodes based on prior knowledge. For any NodeAttribute parameters, these can be created simply by specifying them in the my_nodes.csv as columns and setting load_other_columns_as_attributes=True in the call to DemographicsGenerator().\nTo set IndividualAttributes or IndividualProperties, see the following example. Imagine we know the proportion of “high-risk” individuals in each node and want to use this designation to target them for an intervention.\nFirst, we would add a column to our input file representing the high-risk proportion in each node.\nEx. “my_nodes.csv”\n\n\n\nnodeid\nlat\nlon\npopulation\nhigh_risk\n\n\n\n\n1\n12.11\n-1.47\n1000\n0.05\n\n\n2\n12.03\n-1.44\n1000\n0.10\n\n\n3\n12.13\n-1.59\n1000\n0.15\n\n\n17\n12.06\n-1.48\n1000\n0.50\n\n\n\nThen, when we can assign the “high_risk” property to individuals in each node with the probability listed in the table, by adding the following code to the end of the generate_demographics() function definition, before writing the .json file.\n\n\n\n\n\n\nComing Soon\n\n\n\n\n\n\n\n\n\n\n\nMulti-node simulations allow for the possibility that humans or vectors will move between nodes. EMOD allows 6 migration types for humans (Local, Regional, Sea, Air, Family, and campaign) and two for vectors (Local and Regional). Other than the campaign type, all other migration types are set via input files and scaling factors in config.json, and these migration rates will remain the same throughout the simulation: we will call these “ongoing migration” to distinguish from the “forced migration” that is set via campaigns.\nMultiple migration modes can be used for each agent type (human or vector) simultaneously. For example, we can set up a simulation using Local, Sea, and campaign migration for humans and Local and Regional migration for vectors.\n\n\n\n\n\nHuman Migration Example\n\n\n\n\n\n\nVector Migration Example\n\n\n\n\n\n\n\n\n\nA Single Migration Event\n\n\n\n\n\n\nPeriodic Migration\n\n\n\n\n\n\nPermanent Moves"
+  },
+  {
+    "objectID": "resources.html#python",
+    "href": "resources.html#python",
+    "title": "Resources",
+    "section": "Python",
+    "text": "Python"
+  },
+  {
+    "objectID": "resources.html#r",
+    "href": "resources.html#r",
+    "title": "Resources",
+    "section": "R",
+    "text": "R"
+  },
+  {
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "Resources",
+    "section": "",
+    "text": "Lo, N. C., Andrejko, K., Shukla, P., Baker, T., Sawin, V. I., Norris, S. L., & Lewnard, J. A. (2022).Contribution and quality of mathematical modeling evidence in World Health Organization guidelines: A systematic review. Epidemics, 39, 100570\n\n\n\n\n\nIfeoma D. Ozodiegwu, Monique Ambrose, Beatriz Galatas et al. Application of mathematical modeling to inform national malaria intervention planning in Nigeria. 06 December 2022, PREPRINT (Version 1) available at Research Square.\n\n\n\n\n\nSelvaraj, P., Wenger, E.A. & Gerardin, J. Seasonality and heterogeneity of malaria transmission determine success of interventions in high-endemic settings: a modeling study. BMC Infect Dis 18, 413 (2018).\n\n(recommended) Nikolov, M., Bever, C. A., Upfill-Brown, A., Hamainza, B., Miller, J. M., Eckhoff, P. A., … & Gerardin, J. (2016). Malaria elimination campaigns in the Lake Kariba region of Zambia: a spatial dynamical model. PLoS computational biology, 12(11), e1005192.\n\n\n\n\n\nRunge M., Stahlfeld A., Abrose M., et al. Perennial malaria chemoprevention with and without malaria vaccination to reduce malaria burden in young children: a modeling analysis. 22 March 2023, PREPRINT (Version 1) available at ResearchSquare.\n\n(recommended) Ozodiegwu, I. D., Ambrose, M., Battle, K. E., Bever, C., Diallo, O., Galatas, B., … & Gerardin, J. (2021). Beyond national indicators: adapting the Demographic and Health Surveys’ sampling strategies and questions to better inform subnational malaria intervention policy. Malaria journal, 20(1), 1-7\n\n\n\n\n\nWalker, P. G., Griffin, J. T., Ferguson, N. M., & Ghani, A. C. (2016). Estimating the most efficient allocation of interventions to achieve reductions in Plasmodium falciparum malaria burden and transmission in Africa: a modelling study. The Lancet Global Health, 4(7), e474-e484.\n\n\n\n\n\nRunge, M., Thawer, S.G., Molteni, F. et al. Sub-national tailoring of malaria interventions in Mainland Tanzania: simulation of the impact of strata-specific intervention combinations using modelling. Malar J 21, 92 (2022).\n\n(recommended to review) Ifeoma D. Ozodiegwu, Monique Ambrose, Beatriz Galatas et al. Application of mathematical modeling to inform national malaria intervention planning in Nigeria. 06 December 2022, PREPRINT (Version 1) available at Research Square.\n\n\n\n\n\nGerardin, J., Bever, C.A., Bridenbecker, D. et al. Effectiveness of reactive case detection for malaria elimination in three archetypical transmission settings: a modelling study. Malar J 16, 248 (2017).\n\n\n\n\n\nSlater, H., Ross, A., Ouédraogo, A. et al. Assessing the impact of next-generation rapid diagnostic tests on Plasmodium falciparum malaria elimination strategies. Nature 528, S94–S101 (2015).\n(recommended) Gerardin, J., Ouédraogo, A.L., McCarthy, K.A. et al. Characterization of the infectious reservoir of malaria with an agent-based model calibrated to age-stratified parasite densities and infectiousness. Malar J 14, 231 (2015).\n\n\n\n\n\nPenny, M. A., Verity, R., Bever, C. A., Sauboin, C., Galactionova, K., Flasche, S., … & Ghani, A. C. (2016). Public health impact and cost-effectiveness of the RTS, S/AS01 malaria vaccine: a systematic comparison of predictions from four mathematical models.The Lancet, 387(10016), 367\n375\n(recommended) Smith, N.R., Trauer, J.M., Gambhir, M. et al. Agent-based models of malaria transmission: a systematic review. Malar J 17, 299 (2018)."
+  },
+  {
+    "objectID": "resources.html#coding-tutorials",
+    "href": "resources.html#coding-tutorials",
+    "title": "Resources",
+    "section": "Coding Tutorials",
+    "text": "Coding Tutorials\n\nPython\n\n\nR"
+  },
+  {
+    "objectID": "resources.html#program-materials",
+    "href": "resources.html#program-materials",
+    "title": "Resources",
+    "section": "Program Materials",
+    "text": "Program Materials\n\n2023 Program Description\nDescription of File - English\n- Frances\n- Português\n\n\n2023 Program Handbook\nDescription of File - English\n- Frances\n- Português"
+  },
+  {
+    "objectID": "help.html#program-faq",
+    "href": "help.html#program-faq",
+    "title": "Help",
+    "section": "Program FAQ",
+    "text": "Program FAQ"
+  },
+  {
+    "objectID": "help.html#technical-troubleshooting",
+    "href": "help.html#technical-troubleshooting",
+    "title": "Help",
+    "section": "Technical Troubleshooting",
+    "text": "Technical Troubleshooting\n\nEMOD\n\n\nGithub\n\n\nQUEST"
+  },
+  {
+    "objectID": "people.html",
+    "href": "people.html",
+    "title": "Team",
+    "section": "",
+    "text": "Program Director\n\nJaline Gerardin\n\nCurriculum\n\nAnne Stahlfeld\nTobias Holden\n\nInstructional Staff\n\nIsaiah Agorinya\nBenedicta Mensah\nKok Ben Toh"
+  },
+  {
+    "objectID": "resources.html#dhs-program-data",
+    "href": "resources.html#dhs-program-data",
+    "title": "Resources",
+    "section": "DHS Program Data",
+    "text": "DHS Program Data"
+  },
+  {
+    "objectID": "resources.html#scientific-communication-tips",
+    "href": "resources.html#scientific-communication-tips",
+    "title": "Resources",
+    "section": "Scientific Communication Tips",
+    "text": "Scientific Communication Tips\n\nWriting\n\n\nPresentations"
+  },
+  {
+    "objectID": "resources.html#scientific-communication",
+    "href": "resources.html#scientific-communication",
+    "title": "Resources",
+    "section": "Scientific Communication",
+    "text": "Scientific Communication\n\nWriting\n\n\nPresentations"
+  }
+]
