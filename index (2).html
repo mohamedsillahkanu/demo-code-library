@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code library for stratification and SNT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/4d4544bd8db8361c9438fa4820e0cac16be5e2d4/Ahadi%20logo%20on%20blue%20background.png
+    " type="image/png">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            background-color: #1e1e2e;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        .overview {
+            width: 100%;
+            height: 100vh;
+            background-color: #28293d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .overview h1 {
+            color: #87CEEB;
+            font-size: 2.5em;
+        }
+        .overview h2, .overview h3 {
+            margin-top: 15px;
+            color: #ffffff;
+        }
+        .overview p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .sidebar {
+            width: 15%;
+            background-color: #28293d;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            position: fixed;
+            height: 100vh;
+        }
+        .sidebar h2 {
+            color: #87CEEB;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .sidebar button {
+            margin-bottom: 50px;
+            font-size: 16px;
+            padding: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        .sidebar li.active {
+            background-color: #87CEEB;
+            color: #000000;
+        }
+        .dropdown-content {
+            display: none;
+            padding-left: 20px;
+            background-color: #3a3b52;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .sidebar li.open .dropdown-content {
+            display: block;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            margin-left: 20%;
+            background-color: #1e1e2e;
+        }
+        .section-buttons {
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+        .section-buttons button {
+            padding: 10px;
+            margin-right: 10px;
+            background-color: #474761;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .section-buttons button.active {
+            background-color: #87CEEB;
+            color: #000000;
+        }
+        .topic-intro {
+            background-color: #ffffff;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .code-section, .image-section {
+            background-color: #33334d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+            position: relative;
+        }
+        .code-section h3, .image-section h3 {
+            margin-top: 0;
+        }
+        .full-code {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            color: #000;
+            margin-top: 10px;
+        }
+        .sample-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .sample-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .custom-button {
+            background-color: #87CEEB;
+            font-size: 18px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 30px;
+            right: 10px;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #87CEEB;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        let currentSection = '';
+        let currentLanguage = '';
+        let previousLanguage = '';
+
+        function toggleDropdown(item) {
+            item.classList.toggle('open');
+        }
+
+        function selectSidebarItem(event, item, section) {
+            event.stopPropagation();
+            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            currentSection = section;
+            updateURL();
+            updateContent();
+        }
+
+        function showCode(language) {
+            if (currentSection && currentSection !== 'overview') {
+                currentLanguage = language;
+                previousLanguage = currentLanguage;
+                updateURL();
+                updateContent();
+                document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
+                document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
+            }
+        }
+
+        function updateURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const lang = urlParams.get('lang');
+
+            if (currentSection && currentSection !== 'overview') {
+                let newURL = `${window.location.origin}${window.location.pathname}?page=${encodeURIComponent(currentSection)}`;
+
+                if (currentLanguage || lang) {
+                    newURL += `&lang=${encodeURIComponent(currentLanguage || lang)}`;
+                }
+
+                window.history.pushState({}, '', newURL);
+            } else {
+                const newURL = `${window.location.origin}${window.location.pathname}?page=overview`;
+                window.history.pushState({}, '', newURL);
+            }
+        }
+
+        function updateContent() {
+            const topicIntro = document.querySelector('.topic-intro');
+            const codeDisplay = document.querySelector('.full-code');
+            const sampleImage = document.querySelector('.sample-image img');
+
+            if (!currentSection || currentSection === 'overview') {
+                topicIntro.innerText = 'Select a section on the sidebar';
+                document.querySelector('.overview').style.display = 'flex';
+                document.querySelector('.sidebar').style.display = 'none';
+                document.querySelector('.content').style.display = 'none';
+                return;
+            }
+
+            if (!currentLanguage) {
+                topicIntro.innerText = 'Select a section on the sidebar to display sample code and output';
+                return;
+            }
+
+            document.querySelector('.overview').style.display = 'none';
+            document.querySelector('.sidebar').style.display = 'flex';
+            document.querySelector('.content').style.display = 'flex';
+
+            if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
+                topicIntro.innerText = 'This section provides code to read and display shapefiles in R.';
+                codeDisplay.innerText = `
+
+
+# Step 1: Install necessary libraries
+install.packages("sf")
+
+
+
+#***********************************************************************************************************************************************
+# Step 2: Import necessary libraries
+library(sf)
+
+# Explanation:
+# - sf: Used to work with geospatial data in R.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define the path to the shapefile components
+shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+
+
+# Explanation:
+# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
+# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components
+download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
+download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
+download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
+
+# Explanation:
+# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
+# - This ensures all necessary files are available for reading the shapefile.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Load shapefile data into an sf object
+gdf <- st_read("Chiefdom_2021.shp")
+
+# Explanation:
+# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
+# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Set the Coordinate Reference System (CRS)
+st_crs(gdf) <- 4326
+
+# Explanation:
+# - 'st_crs()' is used to set the CRS of the sf object.
+# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 7: View the first few rows of the sf object
+print(gdf)
+
+# Explanation:
+# - 'print(gdf)' print only a portion of the spatial object by default.`;
+                sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
+            } else if (currentSection === 'basic_plot' && currentLanguage === 'R English') {
+    topicIntro.innerText = 'Basic map plotting involves visualizing geographic data to understand spatial patterns';
+    codeDisplay.innerText = `
+
+
+#***********************************************************************************************************************************************
+# Step 1: Install necessary libraries
+install.packages("sf") # Installs the 'sf' library to handle spatial data
+install.packages("ggplot2") # Installs the 'ggplot2' library for data visualization
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 2: Import the necessary libraries
+library(sf) # Loads the 'sf' package, which is used to work with geospatial data in R
+library(ggplot2) # Loads the 'ggplot2' package for advanced plotting
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define the path to the shapefile components on GitHub
+shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+
+
+# Explanation:
+# - These variables hold the URLs to the raw shapefile components (shp, shx, and dbf files) in the GitHub repository.
+# - A shapefile consists of multiple files, so all components must be downloaded.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components locally
+download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
+download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
+download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
+
+# Explanation:
+# - 'download.file()' downloads each of the shapefile components and saves them locally.
+# - This ensures that the entire shapefile (which includes geometry, attributes, and index) is available for analysis.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Load the shapefile into an sf object
+gdf <- st_read("Chiefdom_2021.shp")
+
+# Explanation:
+# - 'st_read()' reads the shapefile into an 'sf' object (gdf).
+# - The 'sf' object contains both the spatial features (geometry) and attributes of the shapefile.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Set the Coordinate Reference System (CRS)
+st_crs(gdf) <- 4326
+
+
+# Explanation:
+# - 'st_crs() <- 4326' assigns the coordinate reference system (CRS) to the sf object.
+# - EPSG 4326 represents latitude and longitude, commonly used for geographic data.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Plot the shapefile using ggplot2 for enhanced visualization, with customization
+ggplot(data = gdf) +
+  geom_sf() +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),  # Remove grid lines
+    axis.text = element_blank(),   # Remove x and y axis text (tick labels)
+    axis.ticks = element_blank(),  # Remove x and y axis ticks
+    plot.title = element_text(hjust = 0.5, size = 16)  # Center the title and adjust its size
+  ) +
+  ggtitle("Map of Sierra Leone")
+
+# Explanation:
+# - 'geom_sf()' adds the geometry from the sf object to the plot.
+# - 'theme_minimal()' sets a basic clean theme, which is further customized.
+# - 'theme()' allows for specific customizations:
+#   - 'panel.grid = element_blank()' removes grid lines.
+#   - 'axis.text = element_blank()' removes the axis text (x and y tick labels).
+#   - 'axis.ticks = element_blank()' removes the axis ticks.
+#   - 'plot.title = element_text(hjust = 0.5)' centers the title by setting 'hjust' to 0.5 (horizontal justification).
+#   - 'size = 16' adjusts the size of the title text to make it more readable.`;
+
+                
+    sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/bf20a81887a57cedf3f9b13245a3122e8594060a/map%20of%20sl.png';
+} else if (currentSection === 'admin_units' && currentLanguage === 'R English') {
+    topicIntro.innerText = 'Administrative unit overlays involve displaying different levels of administrative boundaries on maps, such as country, province, and district boundaries. These overlays help to provide context to spatial analysis';
+    codeDisplay.innerText = `
+
+#***********************************************************************************************************************************************
+# Step 1: Install necessary libraries
+install.packages("sf")       # Install 'sf' for spatial data handling
+install.packages("ggplot2")  # Install 'ggplot2' for advanced plotting
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 2: Import necessary libraries
+library(sf)       # Load 'sf' package for geospatial data manipulation
+library(ggplot2)  # Load 'ggplot2' for plotting
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define URLs to shapefile components for adm1 and adm3
+adm1_shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM1.shp'
+adm1_shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM1.shx'
+adm1_shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM1.dbf'
+
+adm3_shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM3.shp'
+adm3_shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM3.shx'
+adm3_shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/b319b4afc5168a33cfe1173a1ea0de7094e9593f/geoBoundaries-BFA-ADM3.dbf'
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components locally for adm1 and adm3
+# Download adm1 shapefile components
+download.file(adm1_shapefile_path, destfile = "geoBoundaries_BFA_ADM1.shp", mode = "wb")
+download.file(adm1_shapefile_shx, destfile = "geoBoundaries_BFA_ADM1.shx", mode = "wb")
+download.file(adm1_shapefile_dbf, destfile = "geoBoundaries_BFA_ADM1.dbf", mode = "wb")
+
+# Download adm3 shapefile components
+download.file(adm3_shapefile_path, destfile = "geoBoundaries_BFA_ADM3.shp", mode = "wb")
+download.file(adm3_shapefile_shx, destfile = "geoBoundaries_BFA_ADM3.shx", mode = "wb")
+download.file(adm3_shapefile_dbf, destfile = "geoBoundaries_BFA_ADM3.dbf", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Load shapefiles into sf objects
+adm1 <- st_read("geoBoundaries_BFA_ADM1.shp")   # Reads administrative level 1 shapefile
+adm3 <- st_read("geoBoundaries_BFA_ADM3.shp")   # Reads administrative level 3 shapefile
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Set the Coordinate Reference System (CRS) to ensure consistency
+st_crs(adm1) <- 4326  # Set CRS to WGS84 for adm1
+st_crs(adm3) <- 4326  # Set CRS to WGS84 for adm3
+
+# Explanation:
+# - It is crucial to make sure both spatial layers have the same CRS to overlay them accurately.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Plot the adm1 and adm3 layers together using ggplot2
+ggplot() +
+  geom_sf(data = adm1, fill = NA, color = "#47B5FF", lwd = 1.8) +  # Plot adm1 boundaries in lightblue
+  geom_sf(data = adm3, fill = NA, color = "black", size = 1) +   # Plot adm3 boundaries in black
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),   # Remove grid lines
+    axis.text = element_blank(),    # Remove axis tick labels
+    axis.ticks = element_blank(),   # Remove axis ticks
+    plot.title = element_text(hjust = 0.5, size = 16)  # Center and adjust the title size
+  ) +
+  ggtitle("Overlay of Administrative Units (ADM1 and ADM3)")
+
+# Explanation:
+# - 'geom_sf(data = adm1, fill = NA, color = "#47B5FF")' plots the adm1 boundaries in lightblue without filling.
+# - 'geom_sf(data = adm3, fill = NA, color = "black")' plots the adm3 boundaries in black without filling.
+# - 'theme_minimal()' sets a simple theme, and 'theme()' is used to remove unwanted elements like grid lines and axis ticks.
+# - 'ggtitle()' adds a title and centers it for better visual presentation.`;
+    sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/b1eb6edf32dad556c200b2823204e1689f77155b/adminUnits.png';
+} else if (currentSection === 'merge_excel' && currentLanguage === 'R English') {
+    topicIntro.innerText = 'Merging a shapefile with Excel involves combining spatial data with attribute data from a spreadsheet. This enriches the spatial data with additional non-spatial attributes, making the visualization more informative';
+    codeDisplay.innerText = `
+
+#***********************************************************************************************************************************************
+# Step 1: Install necessary libraries
+install.packages("sf")          # Install 'sf' for spatial data handling
+install.packages("readxl")      # Install 'readxl' for reading Excel files
+install.packages("dplyr")       # Install 'dplyr' for data manipulation
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 2: Import necessary libraries
+library(sf)          # Load 'sf' package for geospatial data manipulation
+library(readxl)      # Load 'readxl' package for reading Excel files
+library(dplyr)       # Load 'dplyr' for data manipulation
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define URLs to shapefile components for 'Chiefdom 2021'
+chiefdom_shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+chiefdom_shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+chiefdom_shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components locally for 'Chiefdom 2021'
+download.file(chiefdom_shapefile_path, destfile = "Chiefdom_2021.shp", mode = "wb")
+download.file(chiefdom_shapefile_shx, destfile = "Chiefdom_2021.shx", mode = "wb")
+download.file(chiefdom_shapefile_dbf, destfile = "Chiefdom_2021.dbf", mode = "wb")
+#***********************************************************************************************************************************************
+# Step 5: Load the shapefile into an sf object
+adm3 <- st_read("Chiefdom_2021.shp")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Set the Coordinate Reference System (CRS) to ensure consistency
+st_crs(adm3) <- 4326  # Set CRS to WGS84
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 7: Read the Excel file that contains additional attribute data
+# Define the raw URL for the Excel file
+excel_file_url <- "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/0912c6f41ef3256396c145781450286a91147554/Chiefdom_data.xlsx"
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 8: Download the Excel file to the local directory
+download.file(excel_file_url, destfile = "Chiefdom_data.xlsx", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 9: Load Excel data into R
+excel_data <- read_excel("Chiefdom_data.xlsx")
+
+# Explanation:
+# - 'download.file()' downloads the Excel file from the raw GitHub URL and saves it locally.
+# - 'read_excel()' reads the downloaded Excel file into an R data frame.
+# - Ensure the Excel data has a common key column (e.g., 'adm3_id') to merge with the shapefile.
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 10: Perform the merge operation and validate 1:1 relationship
+# Ensure that both adm3 and excel_data have a common column named 'adm3_id'
+merged_data <- merge(adm3, excel_data, by = "FIRST_CHIE", all = FALSE)
+
+# Validate 1:1 Merge:
+# Identify rows that did not merge (in both adm3 and excel_data)
+unmatched_adm3 <- anti_join(adm3, excel_data, by = "FIRST_CHIE")  # Rows in 'adm3' not in 'excel_data'
+unmatched_excel <- anti_join(excel_data, adm3, by = "FIRST_CHIE") # Rows in 'excel_data' not in 'adm3'
+
+# Print the non-matching rows
+print("Rows in the shapefile (adm3) that did not merge:")
+print(unmatched_adm3)
+
+print("Rows in the Excel data that did not merge:")
+print(unmatched_excel)
+
+# Explanation:
+# - 'anti_join(adm3, excel_data, by = "FIRST_CHIE")' finds rows in 'adm3' that do not have a matching row in 'excel_data'.
+# - 'anti_join(excel_data, adm3, by = "FIRST_CHIE")' finds rows in 'excel_data' that do not have a matching row in 'adm3'.
+# - The print statements display the rows that were not matched during the merge process.
+
+# Step 8: Print the merged data to inspect the result
+print("Merged Data:")
+print(merged_data)
+
+# Explanation:
+# - 'print(merged_data)' will display the contents of the merged sf object in the console.
+# - This allows you to verify that the data merge was successful and to inspect the attributes.`;
+    sampleImage.src = 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/05f17c7e8e997d29e3a5000bc1adab46779554b6/Merge%20with%20excel.png';
+                
+} else if (currentSection === 'map_numeric' && currentLanguage === 'R English') {
+    topicIntro.innerText = 'Mapping by numeric variables allows for visualizing quantitative attributes across geographic regions. Different color intensities are typically used to represent the magnitude of numeric values ';
+    codeDisplay.innerText = `
+
+#***********************************************************************************************************************************************
+# Step 1: Install necessary packages (if not installed)
+install.packages("sf")          # Install 'sf' for spatial data handling
+install.packages("readxl")      # Install 'readxl' for reading Excel files
+install.packages("dplyr")       # Install 'dplyr' for data manipulation
+install.packages("ggplot2")     # Install 'ggplot2' for plotting maps and visualizations
+install.packages("viridis")     # Install 'viridis' for color palettes
+install.packages("RColorBrewer")# Install 'RColorBrewer' for color palettes
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 2: Load the necessary libraries
+library(sf)          # Load 'sf' package to work with spatial data
+library(readxl)      # Load 'readxl' package to read Excel files
+library(dplyr)       # Load 'dplyr' package to manipulate data
+library(ggplot2)     # Load 'ggplot2' package to plot spatial data
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define URLs to download shapefile components for 'Chiefdom 2021'
+chiefdom_shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+chiefdom_shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+chiefdom_shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components locally for 'Chiefdom 2021'
+download.file(chiefdom_shapefile_path, destfile = "Chiefdom_2021.shp", mode = "wb")
+download.file(chiefdom_shapefile_shx, destfile = "Chiefdom_2021.shx", mode = "wb")
+download.file(chiefdom_shapefile_dbf, destfile = "Chiefdom_2021.dbf", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Load the shapefile into an sf object
+adm3 <- st_read("Chiefdom_2021.shp")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Set the Coordinate Reference System (CRS) to ensure consistency
+st_crs(adm3) <- 4326  # Set CRS to WGS84 (latitude/longitude)
+#***********************************************************************************************************************************************
+# Step 6: Read the Excel file that contains additional attribute data
+# Define the raw URL for the Excel file
+excel_file_url <- "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/d48b5acb7e4e79a6b4c929e9fa11a4335a47a389/Chiefdom_data1.xlsx"
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 7: Download the Excel file to the local directory
+download.file(excel_file_url, destfile = "Chiefdom_data.xlsx", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 8: Load Excel data into R
+excel_data <- read_excel("Chiefdom_data.xlsx")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 9: Merge the shapefile and Excel data by a common key column ('adm3_id')
+# Ensure that both adm3 and excel_data have a common column named 'adm3_id'
+merged_data <- merge(adm3, excel_data, by = "FIRST_CHIE", all = FALSE)
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 10: Validate 1:1 Merge
+# Identify rows that did not merge (in both adm3 and excel_data)
+unmatched_adm3 <- anti_join(adm3, excel_data, by = "FIRST_CHIE")  # Rows in 'adm3' not in 'excel_data'
+unmatched_excel <- anti_join(excel_data, adm3, by = "FIRST_CHIE") # Rows in 'excel_data' not in 'adm3'
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 11: Print the non-matching rows to check if any discrepancies exist
+print("Rows in the shapefile (adm3) that did not merge:")
+print(unmatched_adm3)
+
+print("Rows in the Excel data that did not merge:")
+print(unmatched_excel)
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 9: Categorize the 'Testing rate' column in the merged dataset
+# Create a new column 'Testing_rate_category' based on defined ranges
+merged_data <- merged_data %>%
+  mutate(Testing_rate= cut(
+    Testing_rate,  # Column to be categorized
+    breaks = c(-Inf, 20, 40, 60, 80, 100),  # Define the breakpoints for categories
+    labels = c("<20", "20-40", "41-60", "61-80", "81-100")  # Labels for each category
+  ))
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 10: Plot the map using ggplot2
+ggplot(data = merged_data) +
+  geom_sf(aes(fill = Testing_rate), color = "black", lwd = 0.5) +  # Fill regions based on Testing_rate_category
+  scale_fill_brewer(palette = "RdYlGn", name = "Testing rate (%)") +  # Use RdYlGn palette with a customized legend title
+  theme_minimal() +  # Apply a minimal theme for clean visualization
+  theme(
+    panel.grid = element_blank(),  # Remove background grid lines for a cleaner look
+    axis.text = element_blank(),   # Remove axis labels (tick values)
+    axis.ticks = element_blank(),  # Remove axis tick marks
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),  # Center the title and make it bold
+    legend.position = "right"      # Position the legend on the right
+  ) +
+  ggtitle("Testing Rate by Chiefdom")  # Add and center the title of the map`;
+    sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/e59b64b04df0427ab5bf7a8cf8bb30120592a9f3/testing%20rate%20final.png';
+} else if (currentSection === 'map_categorical' && currentLanguage === 'R English') {
+    topicIntro.innerText = 'Mapping by categorical variables uses different colors or symbols to represent various classes or categories within the dataset. This type of map is useful for visualizing classifications.';
+    codeDisplay.innerText = `
+
+#***********************************************************************************************************************************************
+# Step 1: Install necessary packages (if not installed)
+install.packages("sf")          # Install 'sf' for spatial data handling
+install.packages("readxl")      # Install 'readxl' for reading Excel files
+install.packages("dplyr")       # Install 'dplyr' for data manipulation
+install.packages("ggplot2")     # Install 'ggplot2' for plotting maps
+install.packages("RColorBrewer")# Install 'RColorBrewer' for color palettes
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 2: Load the necessary libraries
+library(sf)          # Load 'sf' package to work with spatial data
+library(readxl)      # Load 'readxl' package to read Excel files
+library(dplyr)       # Load 'dplyr' package to manipulate data
+library(ggplot2)     # Load 'ggplot2' package to plot spatial data
+library(RColorBrewer)# Load 'RColorBrewer' package for enhanced color palettes
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 3: Define URLs to download shapefile components for 'Chiefdom 2021'
+chiefdom_shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
+chiefdom_shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
+chiefdom_shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 4: Download the shapefile components locally for 'Chiefdom 2021'
+download.file(chiefdom_shapefile_path, destfile = "Chiefdom_2021.shp", mode = "wb")
+download.file(chiefdom_shapefile_shx, destfile = "Chiefdom_2021.shx", mode = "wb")
+download.file(chiefdom_shapefile_dbf, destfile = "Chiefdom_2021.dbf", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 5: Load the shapefile into an sf object
+adm3 <- st_read("Chiefdom_2021.shp")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 6: Set the Coordinate Reference System (CRS) to ensure consistency
+st_crs(adm3) <- 4326  # Set CRS to WGS84 (latitude/longitude)
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 7: Read the Excel file that contains additional attribute data
+# Define the raw URL for the Excel file
+excel_file_url <- "https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/d48b5acb7e4e79a6b4c929e9fa11a4335a47a389/Chiefdom_data1.xlsx"
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 8: Download the Excel file to the local directory
+download.file(excel_file_url, destfile = "Chiefdom_data1.xlsx", mode = "wb")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 9: Load Excel data into R
+excel_data <- read_excel("Chiefdom_data1.xlsx")
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 10: Merge the shapefile and Excel data by a common key column ('adm3_id')
+# Ensure that both adm3 and excel_data have a common column named 'adm3_id'
+merged_data <- merge(adm3, excel_data, by = "FIRST_CHIE", all = FALSE)
+#***********************************************************************************************************************************************
+
+
+#***********************************************************************************************************************************************
+# Step 11: Plot the map using ggplot2 with RColorBrewer Set3 palette for the categorical column IRS
+ggplot(data = merged_data) +
+  geom_sf(aes(fill = IRS), color = "black", size = 1.2, linetype = "solid") +  # Fill regions based on IRS column, add thicker borders for separation
+  scale_fill_brewer(
+    palette = "Set3",  # Use 'Set1' from RColorBrewer for distinct categorical colors
+    name = "IRS Status"  # Legend title
+  ) +
+  theme_minimal() +  # Use a minimalistic theme for clean visualization
+  theme(
+    panel.grid = element_blank(),  # Remove background grid lines for a cleaner look
+    axis.text = element_blank(),   # Remove axis labels (tick values)
+    axis.ticks = element_blank(),  # Remove axis tick marks
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),  # Center the title and make it bold
+    legend.position = "right"      # Position the legend on the right
+  ) +
+  ggtitle("IRS Status by Chiefdom")  # Add and center the map title`;
+    sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/b21c606368ab3eafee06fd7fae9a55dd7bce8081/IRS%20NEW.png';
+} else {
+    topicIntro.innerText = 'Under construction';
+    codeDisplay.innerText = `
+
+    No code available
+
+
+                                             `;
+    sampleImage.src = '';
+} 
+        }
+        function showOverviewPage() {
+            currentSection = 'overview';
+            currentLanguage = '';
+            updateURL();
+            document.querySelector('.overview').style.display = 'flex';
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.content').style.display = 'none';
+        }
+
+        function hideOverviewPage() {
+            updateURL();
+            document.querySelector('.overview').style.display = 'none';
+            document.querySelector('.sidebar').style.display = 'flex';
+            document.querySelector('.content').style.display = 'flex';
+        }
+
+        function handlePageLoad() {
+            const params = new URLSearchParams(window.location.search);
+            const section = params.get('page');
+            const language = params.get('lang');
+
+            if (section) {
+                currentSection = section;
+            }
+            if (language && currentSection !== 'overview') {
+                currentLanguage = language;
+            }
+
+            if (currentSection && currentSection !== 'overview') {
+                document.querySelector(`.sidebar li[onclick*="${currentSection}"]`).classList.add('active');
+                if (currentLanguage) {
+                    document.querySelector(`#${currentLanguage.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
+                }
+                hideOverviewPage();
+                updateContent();
+            } else {
+                showOverviewPage();
+            }
+        }
+
+        function copyCode() {
+            const code = document.querySelector('.full-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Code copied to clipboard!');
+            });
+        }
+
+        window.onload = handlePageLoad;
+    </script>
+</head>
+<body>
+    <!-- Overview Page -->
+    <div class="overview">
+        <div>
+            <h1>Code library for stratification and SNT</h1>
+            <h3>Version: 6 November 2024</h3>
+            <h3>Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin</h3>
+            <h2>Overview</h2>
+            <h3>Motivation</h3>
+            <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.
+            </p>
+            <p>As SNT matures, more quality assurance is needed such that NMCPs can be confident that the analysis they use to inform their decisions is of high quality regardless of the individual supporting analyst. The continued rollout of SNT also means that analysis can become more efficient if analysts are better able to build on each other’s work rather than tempted to reinvent what has already been developed. Lastly, SNT analysis can become much more accessible if there is a common resource available to help those with intermediate coding skills quickly access the collective knowledge of the SNT analyst community.</p>
+
+            <h3>Objectives</h3>
+            <p>We will build a code library for SNT analysis to:</p>
+            <ul>
+                <li>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar, correct approaches.</li>
+                <li>2. Improve efficiency of SNT analysis by minimizing duplication of effort.</li>
+                <li>3. Promote accessibility of SNT analysis by lowering barriers to entry.</li>
+            </ul>
+
+            <h3>Target audience</h3>
+            <p>Anyone doing this kind of work. We assume some basic knowledge of R, some understanding of the data, and a strong connection to the NMCP.</p>
+
+            <h3>Scope</h3>
+            <p>All analysis steps of SNT up to but not including mathematical modeling; some related analysis.</p>
+
+            <button onclick="hideOverviewPage()" class="custom-button">Go to code library</button>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar" style="display:none;">
+        <button onclick="showOverviewPage(event, this, 'overview')" style="width: 85%; border: none; cursor: pointer; border-radius: 5px; padding: 10px; font-size: 18px; background-color: #87CEEB; color: black; position: absolute; top: 25px; left: 10px;margin: 0;">
+            Go to Homepage
+        </button>
+       
+        <ul>  
+            <h2 style="color: #28293d; font-size: 25px;">--</h2>   
+            <h2 style="color: white; font-size: 25px;">Table of Contents</h2>          
+            <h4 style="color: #87CEEB; font-size: 20px;">Data Assembly and Management</h4>
+            <li onclick="toggleDropdown(this)">
+                Shapefiles
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(event, this, 'shapefiles_info')">View Shapefile Data</li>
+                    <li onclick="selectSidebarItem(event, this, 'basic_plot')">Basic Plotting</li>
+                    <li onclick="selectSidebarItem(event, this, 'admin_units')">Admin Units Overlay</li>
+                    <li onclick="selectSidebarItem(event, this, 'merge_excel')">Merge shapefile with excel</li>
+                    <li onclick="selectSidebarItem(event, this, 'map_numeric')">Map by numeric variable</li>
+                    <li onclick="selectSidebarItem(event, this, 'map_categorical')">Map by categorical variable</li>
+                    <li onclick="selectSidebarItem(event, this, 'manual_color')">Map with manual color coding</li>
+                </ul>
+            </li>
+            <li onclick="toggleDropdown(this)">
+                Health Facilities
+                <ul class="dropdown-content">
+                    <li onclick="selectSidebarItem(event, this, 'health_facilities')">Health Facilities</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="content" style="display:none;">
+        <div class="section-buttons">
+            <button id="r-english-btn" onclick="showCode('R English')">R English</button>
+            <button id="r-french-btn" onclick="showCode('R French')">R French</button>
+            <button id="python-english-btn" onclick="showCode('Python English')">Python English</button>
+            <button id="python-french-btn" onclick="showCode('Python French')">Python French</button>
+            <button id="stata-english-btn" onclick="showCode('Stata English')">Stata English</button>
+            <button id="stata-french-btn" onclick="showCode('Stata French')">Stata French</button>
+        </div>
+        <div class="topic-intro">
+            <p>Select an option in the sidebar and a code language at the top of the main menu</p>
+        </div>
+        <div class="main-content">
+            <div class="code-section">
+                <h3>Code</h3>
+                <button class="copy-button" onclick="copyCode()">Copy Code</button>
+                <pre class="full-code"></pre>
+            </div>
+            <div class="image-section">
+                <h3>Sample output</h3>
+                <div class="sample-image">
+                    <img src="" alt="Sample Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
