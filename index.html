@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code library for stratification and SNT</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-funky.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-coy.min.css" rel="stylesheet">
     <link rel="icon" href="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/4d4544bd8db8361c9438fa4820e0cac16be5e2d4/Ahadi%20logo%20on%20blue%20background.png" type="image/png">
     <style>
         body {
@@ -13,14 +13,14 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            background-color: #FFFFFF;
-            color: #000000;
+            background-color: #1e1e2e;
+            color: #ffffff;
             overflow: hidden;
         }
         .overview {
             width: 100%;
             height: 100vh;
-            background-color: #F0F0F0;
+            background-color: #28293d;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,12 +29,12 @@
             box-sizing: border-box;
         }
         .overview h1 {
-            color: #47B5FF;
+            color: #87CEEB;
             font-size: 2.5em;
         }
         .overview h2, .overview h3 {
             margin-top: 15px;
-            color: #000000;
+            color: #ffffff;
         }
         .overview p {
             font-size: 1.1em;
@@ -42,7 +42,7 @@
         }
         .sidebar {
             width: 15%;
-            background-color: #E0E0E0;
+            background-color: #28293d;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -53,7 +53,7 @@
             height: 100vh;
         }
         .sidebar h2 {
-            color: #47B5FF;
+            color: #87CEEB;
             font-size: 1.5em;
             margin-bottom: 10px;
         }
@@ -74,13 +74,13 @@
             user-select: none;
         }
         .sidebar li.active {
-            background-color: #47B5FF;
+            background-color: #87CEEB;
             color: #000000;
         }
         .dropdown-content {
             display: none;
             padding-left: 20px;
-            background-color: #D3D3D3;
+            background-color: #3a3b52;
             border-radius: 5px;
             margin-top: 5px;
         }
@@ -94,7 +94,7 @@
             padding: 20px;
             overflow-y: auto;
             margin-left: 20%;
-            background-color: #FFFFFF;
+            background-color: #1e1e2e;
         }
         .section-buttons {
             align-self: flex-end;
@@ -103,8 +103,8 @@
         .section-buttons button {
             padding: 10px;
             margin-right: 10px;
-            background-color: #CCCCCC;
-            color: #000000;
+            background-color: #474761;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -115,8 +115,8 @@
             color: #000000;
         }
         .topic-intro {
-            background-color: #FFFFFF;
-            color: #000000;
+            background-color: #ffffff;
+            color: #000;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -127,7 +127,7 @@
             gap: 20px;
         }
         .code-section, .image-section {
-            background-color: #F8F8F8;
+            background-color: #33334d;
             border-radius: 10px;
             padding: 20px;
             overflow: auto;
@@ -137,10 +137,10 @@
             margin-top: 0;
         }
         .full-code {
-            background-color: #FFFFFF;
+            background-color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            color: #000000;
+            color: #000;
             margin-top: 10px;
         }
         .sample-image {
@@ -164,7 +164,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            color: #000000;
+            color: white;
             position: absolute;
             top: 30px;
             right: 10px;
@@ -175,7 +175,7 @@
             right: 10px;
             padding: 5px 10px;
             background-color: #47B5FF;
-            color: #000000;
+            color: black;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -256,175 +256,157 @@
             if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
                 topicIntro.innerText = 'This section provides code to read and display shapefiles in R.';
                 codeDisplay.innerText = `
-
-
-# Step 1: Install necessary libraries
+/* ***********************************************************************************************************************************************
+ Step 1: Install necessary libraries
+*********************************************************************************************************************************************** */
 install.packages("sf")
 
-
-
-#***********************************************************************************************************************************************
-# Step 2: Import necessary libraries
+/* ***********************************************************************************************************************************************
+ Step 2: Import necessary libraries
+*********************************************************************************************************************************************** */
 library(sf)
 
-# Explanation:
-# - sf: Used to work with geospatial data in R.
-#***********************************************************************************************************************************************
+// Explanation:
+// - sf: Used to work with geospatial data in R.
 
-
-#***********************************************************************************************************************************************
-# Step 3: Define the path to the shapefile components
+/* ***********************************************************************************************************************************************
+ Step 3: Define the path to the shapefile components
+*********************************************************************************************************************************************** */
 shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
 shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
 shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
 
+// Explanation:
+// - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
+// - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
 
-# Explanation:
-# - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-# - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
-#***********************************************************************************************************************************************
-
-
-#***********************************************************************************************************************************************
-# Step 4: Download the shapefile components
+/* ***********************************************************************************************************************************************
+ Step 4: Download the shapefile components
+*********************************************************************************************************************************************** */
 download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
 download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
 download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
 
-# Explanation:
-# - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-# - This ensures all necessary files are available for reading the shapefile.
-#***********************************************************************************************************************************************
+// Explanation:
+// - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
+// - This ensures all necessary files are available for reading the shapefile.
 
-
-#***********************************************************************************************************************************************
-# Step 5: Load shapefile data into an sf object
+/* ***********************************************************************************************************************************************
+ Step 5: Load shapefile data into an sf object
+*********************************************************************************************************************************************** */
 gdf <- st_read("Chiefdom_2021.shp")
 
-# Explanation:
-# - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-# - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
-#***********************************************************************************************************************************************
+// Explanation:
+// - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
+// - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
 
-
-#***********************************************************************************************************************************************
-# Step 6: Set the Coordinate Reference System (CRS)
+/* ***********************************************************************************************************************************************
+ Step 6: Set the Coordinate Reference System (CRS)
+*********************************************************************************************************************************************** */
 st_crs(gdf) <- 4326
 
-# Explanation:
-# - 'st_crs()' is used to set the CRS of the sf object.
-# - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
-#***********************************************************************************************************************************************
+// Explanation:
+// - 'st_crs()' is used to set the CRS of the sf object.
+// - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
 
-
-#***********************************************************************************************************************************************
-# Step 7: View the first few rows of the sf object
+/* ***********************************************************************************************************************************************
+ Step 7: View the first few rows of the sf object
+*********************************************************************************************************************************************** */
 print(gdf)
 
-# Explanation:
-# - 'print(gdf)' print only a portion of the spatial object by default.`;
+// Explanation:
+// - 'print(gdf)' prints only a portion of the spatial object by default.`;
                 sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
             } else if (currentSection === 'basic_plot' && currentLanguage === 'R English') {
-    topicIntro.innerText = 'Basic map plotting involves visualizing geographic data to understand spatial patterns';
-    codeDisplay.innerText = `
+                topicIntro.innerText = 'Basic map plotting involves visualizing geographic data to understand spatial patterns';
+                codeDisplay.innerText = `
+/* ***********************************************************************************************************************************************
+ Step 1: Install necessary libraries
+*********************************************************************************************************************************************** */
+install.packages("sf") // Installs the 'sf' library to handle spatial data
+install.packages("ggplot2") // Installs the 'ggplot2' library for data visualization
 
+/* ***********************************************************************************************************************************************
+ Step 2: Import the necessary libraries
+*********************************************************************************************************************************************** */
+library(sf) // Loads the 'sf' package, which is used to work with geospatial data in R
+library(ggplot2) // Loads the 'ggplot2' package for advanced plotting
 
-#***********************************************************************************************************************************************
-# Step 1: Install necessary libraries
-install.packages("sf") # Installs the 'sf' library to handle spatial data
-install.packages("ggplot2") # Installs the 'ggplot2' library for data visualization
-#***********************************************************************************************************************************************
-
-
-#***********************************************************************************************************************************************
-# Step 2: Import the necessary libraries
-library(sf) # Loads the 'sf' package, which is used to work with geospatial data in R
-library(ggplot2) # Loads the 'ggplot2' package for advanced plotting
-#***********************************************************************************************************************************************
-
-
-#***********************************************************************************************************************************************
-# Step 3: Define the path to the shapefile components on GitHub
+/* ***********************************************************************************************************************************************
+ Step 3: Define the path to the shapefile components on GitHub
+*********************************************************************************************************************************************** */
 shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
 shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
 shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
 
+// Explanation:
+// - These variables hold the URLs to the raw shapefile components (shp, shx, and dbf files) in the GitHub repository.
+// - A shapefile consists of multiple files, so all components must be downloaded.
 
-# Explanation:
-# - These variables hold the URLs to the raw shapefile components (shp, shx, and dbf files) in the GitHub repository.
-# - A shapefile consists of multiple files, so all components must be downloaded.
-#***********************************************************************************************************************************************
-
-
-#***********************************************************************************************************************************************
-# Step 4: Download the shapefile components locally
+/* ***********************************************************************************************************************************************
+ Step 4: Download the shapefile components locally
+*********************************************************************************************************************************************** */
 download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
 download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
 download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
 
-# Explanation:
-# - 'download.file()' downloads each of the shapefile components and saves them locally.
-# - This ensures that the entire shapefile (which includes geometry, attributes, and index) is available for analysis.
-#***********************************************************************************************************************************************
+// Explanation:
+// - 'download.file()' downloads each of the shapefile components and saves them locally.
+// - This ensures that the entire shapefile (which includes geometry, attributes, and index) is available for analysis.
 
-
-#***********************************************************************************************************************************************
-# Step 5: Load the shapefile into an sf object
+/* ***********************************************************************************************************************************************
+ Step 5: Load the shapefile into an sf object
+*********************************************************************************************************************************************** */
 gdf <- st_read("Chiefdom_2021.shp")
 
-# Explanation:
-# - 'st_read()' reads the shapefile into an 'sf' object (gdf).
-# - The 'sf' object contains both the spatial features (geometry) and attributes of the shapefile.
-#***********************************************************************************************************************************************
+// Explanation:
+// - 'st_read()' reads the shapefile into an 'sf' object (gdf).
+// - The 'sf' object contains both the spatial features (geometry) and attributes of the shapefile.
 
-
-#***********************************************************************************************************************************************
-# Step 6: Set the Coordinate Reference System (CRS)
+/* ***********************************************************************************************************************************************
+ Step 6: Set the Coordinate Reference System (CRS)
+*********************************************************************************************************************************************** */
 st_crs(gdf) <- 4326
 
+// Explanation:
+// - 'st_crs() <- 4326' assigns the coordinate reference system (CRS) to the sf object.
+// - EPSG 4326 represents latitude and longitude, commonly used for geographic data.
 
-# Explanation:
-# - 'st_crs() <- 4326' assigns the coordinate reference system (CRS) to the sf object.
-# - EPSG 4326 represents latitude and longitude, commonly used for geographic data.
-#***********************************************************************************************************************************************
-
-
-#***********************************************************************************************************************************************
-# Step 5: Plot the shapefile using ggplot2 for enhanced visualization, with customization
+/* ***********************************************************************************************************************************************
+ Step 7: Plot the shapefile using ggplot2 for enhanced visualization, with customization
+*********************************************************************************************************************************************** */
 ggplot(data = gdf) +
   geom_sf() +
   theme_minimal() +
   theme(
-    panel.grid = element_blank(),  # Remove grid lines
-    axis.text = element_blank(),   # Remove x and y axis text (tick labels)
-    axis.ticks = element_blank(),  # Remove x and y axis ticks
-    plot.title = element_text(hjust = 0.5, size = 16)  # Center the title and adjust its size
+    panel.grid = element_blank(),  // Remove grid lines
+    axis.text = element_blank(),   // Remove x and y axis text (tick labels)
+    axis.ticks = element_blank(),  // Remove x and y axis ticks
+    plot.title = element_text(hjust = 0.5, size = 16)  // Center the title and adjust its size
   ) +
   ggtitle("Map of Sierra Leone")
 
-# Explanation:
-# - 'geom_sf()' adds the geometry from the sf object to the plot.
-# - 'theme_minimal()' sets a basic clean theme, which is further customized.
-# - 'theme()' allows for specific customizations:
-#   - 'panel.grid = element_blank()' removes grid lines.
-#   - 'axis.text = element_blank()' removes the axis text (x and y tick labels).
-#   - 'axis.ticks = element_blank()' removes the axis ticks.
-#   - 'plot.title = element_text(hjust = 0.5)' centers the title by setting 'hjust' to 0.5 (horizontal justification).
-#   - 'size = 16' adjusts the size of the title text to make it more readable.`;
-
-                
-    sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/bf20a81887a57cedf3f9b13245a3122e8594060a/map%20of%20sl.png';
-} else {
-    topicIntro.innerText = 'Under construction';
-    codeDisplay.innerText = `
+// Explanation:
+// - 'geom_sf()' adds the geometry from the sf object to the plot.
+// - 'theme_minimal()' sets a basic clean theme, which is further customized.
+// - 'theme()' allows for specific customizations:
+//   - 'panel.grid = element_blank()' removes grid lines.
+//   - 'axis.text = element_blank()' removes the axis text (x and y tick labels).
+//   - 'axis.ticks = element_blank()' removes the axis ticks.
+//   - 'plot.title = element_text(hjust = 0.5)' centers the title by setting 'hjust' to 0.5 (horizontal justification).
+//   - 'size = 16' adjusts the size of the title text to make it more readable.`;
+                sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/bf20a81887a57cedf3f9b13245a3122e8594060a/map%20of%20sl.png';
+            } else {
+                topicIntro.innerText = 'Under construction';
+                codeDisplay.innerText = `
 
     No code available
 
-
                                              `;
-    sampleImage.src = '';
-} 
+                sampleImage.src = '';
+            } 
         }
+
         function showOverviewPage() {
             currentSection = 'overview';
             currentLanguage = '';
@@ -491,4 +473,4 @@ ggplot(data = gdf) +
             <h3>Objectives</h3>
             <p>We will build a code library for SNT analysis to:</p>
             <ul>
-                <li>1. Improve quality and reproducibility of SNT analysis by ensuring that
+                <li>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar,
