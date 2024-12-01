@@ -34,10 +34,9 @@
             padding: 20px;
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffffff;
+        .logo img {
+            width: 150px;
+            height: auto;
         }
 
         .nav-links {
@@ -63,9 +62,8 @@
         .hero-section {
             padding: 150px 20px;
             text-align: center;
-            background: url('https://via.placeholder.com/1500x600?text=Hero+Section+Background') no-repeat center;
-            background-size: cover;
-            color: white;
+            background: #004e89;
+            color: black;
         }
 
         .hero-section h1 {
@@ -252,18 +250,18 @@
 <body>
     <header class="header">
         <nav class="navbar">
-            <div class="logo">ICF-SL</div>
+            <div class="logo"><img src="https://via.placeholder.com/150x50?text=Logo" alt="ICF-SL Logo"></div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
         <div class="hero-section" id="home">
             <h1>Welcome to Informatics Consultancy Firm - Sierra Leone</h1>
             <p>We provide data-driven solutions to empower government agencies and NGOs in making informed decisions for a better future.</p>
-            <button class="cta-button" onclick="scrollToSection('about')">Learn More</button>
+            <button class="cta-button" onclick="window.location.href='about.html'">Learn More</button>
         </div>
     </header>
 
@@ -299,7 +297,7 @@
     <section class="call-to-action-section">
         <h2>Join Us in Making an Impact</h2>
         <p>Partner with us and let's create sustainable data solutions for a better tomorrow.</p>
-        <button onclick="scrollToSection('contact')">Get Involved</button>
+        <button onclick="window.location.href='contact.html'">Get Involved</button>
     </section>
 
     <section class="contact-section" id="contact">
@@ -323,10 +321,6 @@
     </footer>
 
     <script>
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-        }
-
         AOS.init({
             duration: 1200,
         });
