@@ -250,18 +250,18 @@
 <body>
     <header class="header">
         <nav class="navbar">
-            <div class="logo"><img src="https://github.com/mohamedsillahkanu/demo-code-library/blob/7abd817147e246bb29ca3ecb2d2b51f1eef1c23d/icf_sl.jpg" alt="ICF-SL Logo"></div>
+            <div class="logo"><img src="/mnt/data/icf_sl.jpg" alt="ICF-SL Logo"></div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
         <div class="hero-section" id="home">
             <h1>Welcome to Informatics Consultancy Firm - Sierra Leone</h1>
             <p>We provide data-driven solutions to empower government agencies and NGOs in making informed decisions for a better future.</p>
-            <button class="cta-button" onclick="window.location.href='about.html'">Learn More</button>
+            <button class="cta-button" onclick="scrollToSection('about')">Learn More</button>
         </div>
     </header>
 
@@ -297,7 +297,7 @@
     <section class="call-to-action-section">
         <h2>Join Us in Making an Impact</h2>
         <p>Partner with us and let's create sustainable data solutions for a better tomorrow.</p>
-        <button onclick="window.location.href='contact.html'">Get Involved</button>
+        <button onclick="scrollToSection('contact')">Get Involved</button>
     </section>
 
     <section class="contact-section" id="contact">
@@ -318,9 +318,18 @@
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div>
+        <div class="footer-contact">
+            <p>10 Krootown Road, Freetown, Sierra Leone</p>
+            <p>Email: <a href="mailto:info@icf-sl.org">info@icf-sl.org</a></p>
+            <p>Tel: +23299177283 / +23288608100</p>
+        </div>
     </footer>
 
     <script>
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
         AOS.init({
             duration: 1200,
         });
