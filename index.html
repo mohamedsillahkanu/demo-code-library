@@ -1,476 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code library for stratification and SNT</title>
+    <title>Informatics Consultancy Firm - Sierra Leone</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-coy.min.css" rel="stylesheet">
-    <link rel="icon" href="https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/4d4544bd8db8361c9438fa4820e0cac16be5e2d4/Ahadi%20logo%20on%20blue%20background.png" type="image/png">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            background-color: #1e1e2e;
-            color: #ffffff;
-            overflow: hidden;
-        }
-        .overview {
-            width: 100%;
-            height: 100vh;
-            background-color: #28293d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: left;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .overview h1 {
-            color: #87CEEB;
-            font-size: 2.5em;
-        }
-        .overview h2, .overview h3 {
-            margin-top: 15px;
-            color: #ffffff;
-        }
-        .overview p {
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-        .sidebar {
-            width: 15%;
-            background-color: #28293d;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-            scrollbar-width: none;
-            position: fixed;
-            height: 100vh;
-        }
-        .sidebar h2 {
-            color: #87CEEB;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        .sidebar button {
-            margin-bottom: 50px;
-            font-size: 16px;
-            padding: 10px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar li {
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-        }
-        .sidebar li.active {
-            background-color: #87CEEB;
-            color: #000000;
-        }
-        .dropdown-content {
-            display: none;
-            padding-left: 20px;
-            background-color: #3a3b52;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-        .sidebar li.open .dropdown-content {
-            display: block;
-        }
-        .content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-            margin-left: 20%;
-            background-color: #1e1e2e;
-        }
-        .section-buttons {
-            align-self: flex-end;
-            margin-bottom: 20px;
-        }
-        .section-buttons button {
-            padding: 10px;
-            margin-right: 10px;
-            background-color: #474761;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .section-buttons button.active {
-            background-color: #47B5FF;
-            color: #000000;
-        }
-        .topic-intro {
-            background-color: #ffffff;
-            color: #000;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .code-section, .image-section {
-            background-color: #33334d;
-            border-radius: 10px;
-            padding: 20px;
-            overflow: auto;
-            position: relative;
-        }
-        .code-section h3, .image-section h3 {
-            margin-top: 0;
-        }
-        .full-code {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            color: #000;
-            margin-top: 10px;
-        }
-        .sample-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .sample-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-        .custom-button {
-            background-color: #47B5FF;
-            font-size: 18px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            position: absolute;
-            top: 30px;
-            right: 10px;
-        }
-        .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            background-color: #47B5FF;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-r.min.js"></script>
-    <script>
-        let currentSection = '';
-        let currentLanguage = '';
-        let previousLanguage = '';
-
-        function toggleDropdown(item) {
-            item.classList.toggle('open');
-        }
-
-        function selectSidebarItem(event, item, section) {
-            event.stopPropagation();
-            document.querySelectorAll('.sidebar li').forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
-            currentSection = section;
-            updateURL();
-            updateContent();
-        }
-
-        function showCode(language) {
-            if (currentSection && currentSection !== 'overview') {
-                currentLanguage = language;
-                previousLanguage = currentLanguage;
-                updateURL();
-                updateContent();
-                document.querySelectorAll('.section-buttons button').forEach(button => button.classList.remove('active'));
-                document.querySelector(`#${language.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
-            }
-        }
-
-        function updateURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const lang = urlParams.get('lang');
-
-            if (currentSection && currentSection !== 'overview') {
-                let newURL = `${window.location.origin}${window.location.pathname}?page=${encodeURIComponent(currentSection)}`;
-
-                if (currentLanguage || lang) {
-                    newURL += `&lang=${encodeURIComponent(currentLanguage || lang)}`;
-                }
-
-                window.history.pushState({}, '', newURL);
-            } else {
-                const newURL = `${window.location.origin}${window.location.pathname}?page=overview`;
-                window.history.pushState({}, '', newURL);
-            }
-        }
-
-        function updateContent() {
-            const topicIntro = document.querySelector('.topic-intro');
-            const codeDisplay = document.querySelector('.full-code');
-            const sampleImage = document.querySelector('.sample-image img');
-
-            if (!currentSection || currentSection === 'overview') {
-                topicIntro.innerText = 'Select a section on the sidebar';
-                document.querySelector('.overview').style.display = 'flex';
-                document.querySelector('.sidebar').style.display = 'none';
-                document.querySelector('.content').style.display = 'none';
-                return;
-            }
-
-            if (!currentLanguage) {
-                topicIntro.innerText = 'Select a section on the sidebar to display sample code and output';
-                return;
-            }
-
-            document.querySelector('.overview').style.display = 'none';
-            document.querySelector('.sidebar').style.display = 'flex';
-            document.querySelector('.content').style.display = 'flex';
-
-            if (currentSection === 'shapefiles_info' && currentLanguage === 'R English') {
-                topicIntro.innerText = 'This section provides code to read and display shapefiles in R.';
-                codeDisplay.innerText = `
-/* ***********************************************************************************************************************************************
- Step 1: Install necessary libraries
-*********************************************************************************************************************************************** */
-install.packages("sf")
-
-/* ***********************************************************************************************************************************************
- Step 2: Import necessary libraries
-*********************************************************************************************************************************************** */
-library(sf)
-
-// Explanation:
-// - sf: Used to work with geospatial data in R.
-
-/* ***********************************************************************************************************************************************
- Step 3: Define the path to the shapefile components
-*********************************************************************************************************************************************** */
-shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
-shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
-shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
-
-// Explanation:
-// - The variables 'shapefile_shx', 'shapefile_dbf', and 'shapefile_path' hold the raw paths to the shapefile components from the GitHub repository.
-// - All three files (.shp, .shx, .dbf) are required to correctly read the shapefile.
-
-/* ***********************************************************************************************************************************************
- Step 4: Download the shapefile components
-*********************************************************************************************************************************************** */
-download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
-download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
-download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
-
-// Explanation:
-// - 'download.file()' is used to download each component of the shapefile from GitHub and save them locally.
-// - This ensures all necessary files are available for reading the shapefile.
-
-/* ***********************************************************************************************************************************************
- Step 5: Load shapefile data into an sf object
-*********************************************************************************************************************************************** */
-gdf <- st_read("Chiefdom_2021.shp")
-
-// Explanation:
-// - 'st_read()' reads the shapefile into an sf object, which is a data structure for handling geospatial data in R.
-// - The sf object 'gdf' contains both the geometry (spatial features) and attributes (data values) of the shapefile.
-
-/* ***********************************************************************************************************************************************
- Step 6: Set the Coordinate Reference System (CRS)
-*********************************************************************************************************************************************** */
-st_crs(gdf) <- 4326
-
-// Explanation:
-// - 'st_crs()' is used to set the CRS of the sf object.
-// - EPSG:4326 is a common CRS that represents coordinates in longitude and latitude.
-
-/* ***********************************************************************************************************************************************
- Step 7: View the first few rows of the sf object
-*********************************************************************************************************************************************** */
-print(gdf)
-
-// Explanation:
-// - 'print(gdf)' prints only a portion of the spatial object by default.`;
-                sampleImage.src = 'https://github.com/mohamedsillahkanu/SNT-Code-Library/raw/31b914c1115de3ccd6c8045946adc4a84eadc4bb/print%20gdf%20in%20R.png';
-            } else if (currentSection === 'basic_plot' && currentLanguage === 'R English') {
-                topicIntro.innerText = 'Basic map plotting involves visualizing geographic data to understand spatial patterns';
-                codeDisplay.innerText = `
-/* ***********************************************************************************************************************************************
- Step 1: Install necessary libraries
-*********************************************************************************************************************************************** */
-install.packages("sf") // Installs the 'sf' library to handle spatial data
-install.packages("ggplot2") // Installs the 'ggplot2' library for data visualization
-
-/* ***********************************************************************************************************************************************
- Step 2: Import the necessary libraries
-*********************************************************************************************************************************************** */
-library(sf) // Loads the 'sf' package, which is used to work with geospatial data in R
-library(ggplot2) // Loads the 'ggplot2' package for advanced plotting
-
-/* ***********************************************************************************************************************************************
- Step 3: Define the path to the shapefile components on GitHub
-*********************************************************************************************************************************************** */
-shapefile_shx <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shx'
-shapefile_dbf <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.dbf'
-shapefile_path <- 'https://raw.githubusercontent.com/mohamedsillahkanu/SNT-Code-Library/a43027a9454581dd57aec9244e33378da723d38e/Chiefdom%202021.shp'
-
-// Explanation:
-// - These variables hold the URLs to the raw shapefile components (shp, shx, and dbf files) in the GitHub repository.
-// - A shapefile consists of multiple files, so all components must be downloaded.
-
-/* ***********************************************************************************************************************************************
- Step 4: Download the shapefile components locally
-*********************************************************************************************************************************************** */
-download.file(shapefile_path, destfile = "Chiefdom_2021.shp")
-download.file(shapefile_shx, destfile = "Chiefdom_2021.shx")
-download.file(shapefile_dbf, destfile = "Chiefdom_2021.dbf")
-
-// Explanation:
-// - 'download.file()' downloads each of the shapefile components and saves them locally.
-// - This ensures that the entire shapefile (which includes geometry, attributes, and index) is available for analysis.
-
-/* ***********************************************************************************************************************************************
- Step 5: Load the shapefile into an sf object
-*********************************************************************************************************************************************** */
-gdf <- st_read("Chiefdom_2021.shp")
-
-// Explanation:
-// - 'st_read()' reads the shapefile into an 'sf' object (gdf).
-// - The 'sf' object contains both the spatial features (geometry) and attributes of the shapefile.
-
-/* ***********************************************************************************************************************************************
- Step 6: Set the Coordinate Reference System (CRS)
-*********************************************************************************************************************************************** */
-st_crs(gdf) <- 4326
-
-// Explanation:
-// - 'st_crs() <- 4326' assigns the coordinate reference system (CRS) to the sf object.
-// - EPSG 4326 represents latitude and longitude, commonly used for geographic data.
-
-/* ***********************************************************************************************************************************************
- Step 7: Plot the shapefile using ggplot2 for enhanced visualization, with customization
-*********************************************************************************************************************************************** */
-ggplot(data = gdf) +
-  geom_sf() +
-  theme_minimal() +
-  theme(
-    panel.grid = element_blank(),  // Remove grid lines
-    axis.text = element_blank(),   // Remove x and y axis text (tick labels)
-    axis.ticks = element_blank(),  // Remove x and y axis ticks
-    plot.title = element_text(hjust = 0.5, size = 16)  // Center the title and adjust its size
-  ) +
-  ggtitle("Map of Sierra Leone")
-
-// Explanation:
-// - 'geom_sf()' adds the geometry from the sf object to the plot.
-// - 'theme_minimal()' sets a basic clean theme, which is further customized.
-// - 'theme()' allows for specific customizations:
-//   - 'panel.grid = element_blank()' removes grid lines.
-//   - 'axis.text = element_blank()' removes the axis text (x and y tick labels).
-//   - 'axis.ticks = element_blank()' removes the axis ticks.
-//   - 'plot.title = element_text(hjust = 0.5)' centers the title by setting 'hjust' to 0.5 (horizontal justification).
-//   - 'size = 16' adjusts the size of the title text to make it more readable.`;
-                sampleImage.src = 'https://raw.githubusercontent.com/numalariamodeling/snt-code-library-english-version/bf20a81887a57cedf3f9b13245a3122e8594060a/map%20of%20sl.png';
-            } else {
-                topicIntro.innerText = 'Under construction';
-                codeDisplay.innerText = `
-
-    No code available
-
-                                             `;
-                sampleImage.src = '';
-            } 
-        }
-
-        function showOverviewPage() {
-            currentSection = 'overview';
-            currentLanguage = '';
-            updateURL();
-            document.querySelector('.overview').style.display = 'flex';
-            document.querySelector('.sidebar').style.display = 'none';
-            document.querySelector('.content').style.display = 'none';
-        }
-
-        function hideOverviewPage() {
-            updateURL();
-            document.querySelector('.overview').style.display = 'none';
-            document.querySelector('.sidebar').style.display = 'flex';
-            document.querySelector('.content').style.display = 'flex';
-        }
-
-        function handlePageLoad() {
-            const params = new URLSearchParams(window.location.search);
-            const section = params.get('page');
-            const language = params.get('lang');
-
-            if (section) {
-                currentSection = section;
-            }
-            if (language && currentSection !== 'overview') {
-                currentLanguage = language;
-            }
-
-            if (currentSection && currentSection !== 'overview') {
-                document.querySelector(`.sidebar li[onclick*="${currentSection}"]`).classList.add('active');
-                if (currentLanguage) {
-                    document.querySelector(`#${currentLanguage.toLowerCase().replace(' ', '-')}-btn`).classList.add('active');
-                }
-                hideOverviewPage();
-                updateContent();
-            } else {
-                showOverviewPage();
-            }
-        }
-
-        function copyCode() {
-            const code = document.querySelector('.full-code').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Code copied to clipboard!');
-            });
-        }
-
-        window.onload = handlePageLoad;
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 </head>
-<body>
-    <!-- Overview Page -->
-    <div class="overview">
-        <div>
-            <h1>Code library for stratification and SNT</h1>
-            <h3>Version: 6 November 2024</h3>
-            <h3>Authors: Mohamed Sillah Kanu, Sammy Oppong, Jaline Gerardin</h3>
-            <h2>Overview</h2>
-            <h3>Motivation</h3>
-            <p>SNT is here to stay: many NMCPs have found it useful and are continuing to embrace it and further develop it for their analytical needs. Since 2019, multiple individuals have supported the analysis portions of SNT. In most cases, individuals have built their own code in a variety of languages (Stata, R, and Python), sometimes building on others’ previous code and sometimes re-developed independently.
-            </p>
-            <p>As SNT matures, more quality assurance is needed such that NMCPs can be confident that the analysis they use to inform their decisions is of high quality regardless of the individual supporting analyst. The continued rollout of SNT also means that analysis can become more efficient if analysts are better able to build on each other’s work rather than tempted to reinvent what has already been developed. Lastly, SNT analysis can become much more accessible if there is a common resource available to help those with intermediate coding skills quickly access the collective knowledge of the SNT analyst community.</p>
 
-            <h3>Objectives</h3>
-            <p>We will build a code library for SNT analysis to:</p>
-            <ul>
-                <li>1. Improve quality and reproducibility of SNT analysis by ensuring that analysts are using similar,
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">ICF-SL</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="hero-section" id="home">
+            <h1>Informatics Consultancy Firm - Sierra Leone</h1>
+            <p>Providing Data-Driven Solutions for Government Agencies and NGOs</p>
+            <button class="cta-button" onclick="scrollToSection('services')">Explore Our Services</button>
+        </div>
+    </header>
+
+    <section class="slider-section">
+        <div class="slider">
+            <div class="slide">
+                <img src="https://via.placeholder.com/1200x400?text=Data+Management+Solutions" alt="Data Management Solutions">
+                <div class="slide-caption">Data Management Solutions</div>
+            </div>
+            <div class="slide">
+                <img src="https://via.placeholder.com/1200x400?text=Capacity+Building" alt="Capacity Building">
+                <div class="slide-caption">Capacity Building</div>
+            </div>
+            <div class="slide">
+                <img src="https://via.placeholder.com/1200x400?text=Consultancy+Services" alt="Consultancy Services">
+                <div class="slide-caption">Consultancy Services</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section" id="services">
+        <h2>Our Services</h2>
+        <div class="services-container">
+            <div class="service">
+                <h3>Data Management</h3>
+                <p>Comprehensive data management for efficient decision-making and quality control.</p>
+            </div>
+            <div class="service">
+                <h3>Data Analysis</h3>
+                <p>Transforming data into actionable insights to support policy-making.</p>
+            </div>
+            <div class="service">
+                <h3>Capacity Building</h3>
+                <p>Training and workshops to strengthen the capabilities of stakeholders in data management.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <h2>About Us</h2>
+        <p>Informatics Consultancy Firm - Sierra Leone (ICF-SL) is a trusted partner in delivering data-driven solutions for government agencies and NGOs. With a dedicated team of experts, we specialize in helping organizations make informed decisions that impact lives positively.</p>
+    </section>
+
+    <section class="testimonials-section">
+        <h2>What Our Clients Say</h2>
+        <div class="testimonials-slider">
+            <div class="testimonial">
+                <p>"ICF-SL has been instrumental in helping us streamline our data management processes."</p>
+                <h4>- Government Agency Representative</h4>
+            </div>
+            <div class="testimonial">
+                <p>"The workshops conducted by ICF-SL were incredibly insightful and practical."</p>
+                <h4>- NGO Project Lead</h4>
+            </div>
+            <div class="testimonial">
+                <p>"We rely on ICF-SL for all our data analysis needs, and they always deliver exceptional results."</p>
+                <h4>- Partner Organization</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <h2>Contact Us</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Name" required>
+            <input type="email" placeholder="Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Informatics Consultancy Firm - Sierra Leone. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            $('.slider').slick({
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+                arrows: false
+            });
+
+            $('.testimonials-slider').slick({
+                autoplay: true,
+                autoplaySpeed: 5000,
+                dots: true,
+                arrows: false,
+                fade: true
+            });
+        });
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>
