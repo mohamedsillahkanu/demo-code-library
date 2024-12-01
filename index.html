@@ -12,6 +12,201 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f3f3f3, #ffffff);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffdf5b;
+        }
+
+        .hero-section {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            animation: fadeIn 2s;
+        }
+
+        .cta-button {
+            background: #0072ff;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #005bb5;
+        }
+
+        .slider-section {
+            padding: 40px 0;
+            background-color: #f9f9f9;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .slide-caption {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .services-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #feb47b, #ff7e5f);
+            color: #fff;
+        }
+
+        .services-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .service {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            transition: transform 0.3s;
+        }
+
+        .service:hover {
+            transform: translateY(-10px);
+        }
+
+        .about-section {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: #fff;
+            text-align: center;
+        }
+
+        .testimonials-section {
+            padding: 60px 20px;
+            background-color: #f3f3f3;
+            text-align: center;
+        }
+
+        .testimonial {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-section {
+            padding: 60px 20px;
+            background: linear-gradient(to right, #ffdf5b, #ffb100);
+            text-align: center;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form button {
+            background: #0072ff;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: #005bb5;
+        }
+
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -34,15 +229,15 @@
 
     <section class="slider-section">
         <div class="slider">
-            <div class="slide">
+            <div class="slide" data-aos="fade-up">
                 <img src="https://via.placeholder.com/1200x400?text=Data+Management+Solutions" alt="Data Management Solutions">
                 <div class="slide-caption">Data Management Solutions</div>
             </div>
-            <div class="slide">
+            <div class="slide" data-aos="fade-up">
                 <img src="https://via.placeholder.com/1200x400?text=Capacity+Building" alt="Capacity Building">
                 <div class="slide-caption">Capacity Building</div>
             </div>
-            <div class="slide">
+            <div class="slide" data-aos="fade-up">
                 <img src="https://via.placeholder.com/1200x400?text=Consultancy+Services" alt="Consultancy Services">
                 <div class="slide-caption">Consultancy Services</div>
             </div>
@@ -52,15 +247,15 @@
     <section class="services-section" id="services">
         <h2>Our Services</h2>
         <div class="services-container">
-            <div class="service">
+            <div class="service" data-aos="zoom-in">
                 <h3>Data Management</h3>
                 <p>Comprehensive data management for efficient decision-making and quality control.</p>
             </div>
-            <div class="service">
+            <div class="service" data-aos="zoom-in">
                 <h3>Data Analysis</h3>
                 <p>Transforming data into actionable insights to support policy-making.</p>
             </div>
-            <div class="service">
+            <div class="service" data-aos="zoom-in">
                 <h3>Capacity Building</h3>
                 <p>Training and workshops to strengthen the capabilities of stakeholders in data management.</p>
             </div>
@@ -69,21 +264,21 @@
 
     <section class="about-section" id="about">
         <h2>About Us</h2>
-        <p>Informatics Consultancy Firm - Sierra Leone (ICF-SL) is a trusted partner in delivering data-driven solutions for government agencies and NGOs. With a dedicated team of experts, we specialize in helping organizations make informed decisions that impact lives positively.</p>
+        <p data-aos="fade-left">Informatics Consultancy Firm - Sierra Leone (ICF-SL) is a trusted partner in delivering data-driven solutions for government agencies and NGOs. With a dedicated team of experts, we specialize in helping organizations make informed decisions that impact lives positively.</p>
     </section>
 
     <section class="testimonials-section">
         <h2>What Our Clients Say</h2>
         <div class="testimonials-slider">
-            <div class="testimonial">
+            <div class="testimonial" data-aos="flip-up">
                 <p>"ICF-SL has been instrumental in helping us streamline our data management processes."</p>
                 <h4>- Government Agency Representative</h4>
             </div>
-            <div class="testimonial">
+            <div class="testimonial" data-aos="flip-up">
                 <p>"The workshops conducted by ICF-SL were incredibly insightful and practical."</p>
                 <h4>- NGO Project Lead</h4>
             </div>
-            <div class="testimonial">
+            <div class="testimonial" data-aos="flip-up">
                 <p>"We rely on ICF-SL for all our data analysis needs, and they always deliver exceptional results."</p>
                 <h4>- Partner Organization</h4>
             </div>
@@ -92,7 +287,7 @@
 
     <section class="contact-section" id="contact">
         <h2>Contact Us</h2>
-        <form class="contact-form">
+        <form class="contact-form" data-aos="fade-up">
             <input type="text" placeholder="Name" required>
             <input type="email" placeholder="Email" required>
             <textarea placeholder="Your Message" required></textarea>
@@ -125,6 +320,10 @@
         function scrollToSection(sectionId) {
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
+
+        AOS.init({
+            duration: 1200,
+        });
     </script>
 </body>
 
