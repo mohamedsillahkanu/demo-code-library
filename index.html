@@ -8,22 +8,20 @@
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f3f3f3, #ffffff);
+            background: #f3f3f3;
         }
 
         .header {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            background: #004e89;
             padding: 20px;
             color: white;
             text-align: center;
@@ -37,7 +35,7 @@
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             color: #ffffff;
         }
@@ -63,110 +61,147 @@
         }
 
         .hero-section {
-            padding: 100px 20px;
+            padding: 150px 20px;
             text-align: center;
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            background: url('https://via.placeholder.com/1500x600?text=Hero+Section+Background') no-repeat center;
+            background-size: cover;
             color: white;
-            animation: fadeIn 2s;
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 24px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .cta-button {
-            background: #0072ff;
-            color: #fff;
+            background: #ffdf5b;
+            color: #004e89;
             border: none;
             padding: 15px 30px;
-            font-size: 16px;
-            margin-top: 20px;
+            font-size: 18px;
+            margin-top: 30px;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         .cta-button:hover {
-            background: #005bb5;
+            background: #e0b800;
         }
 
-        .slider-section {
-            padding: 40px 0;
-            background-color: #f9f9f9;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .slide-caption {
+        .about-section {
+            padding: 60px 20px;
             text-align: center;
-            margin-top: 10px;
+            background: #ffffff;
+        }
+
+        .about-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .about-content p {
             font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            line-height: 1.8;
+            margin-bottom: 15px;
         }
 
         .services-section {
             padding: 60px 20px;
+            background: #f9f9f9;
+        }
+
+        .services-section h2 {
             text-align: center;
-            background: linear-gradient(135deg, #feb47b, #ff7e5f);
-            color: #fff;
+            font-size: 36px;
+            margin-bottom: 40px;
         }
 
         .services-container {
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 30px;
         }
 
         .service {
             background: white;
-            color: #333;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             max-width: 300px;
-            transition: transform 0.3s;
-        }
-
-        .service:hover {
-            transform: translateY(-10px);
-        }
-
-        .about-section {
-            padding: 60px 20px;
-            background: linear-gradient(135deg, #0072ff, #00c6ff);
-            color: #fff;
             text-align: center;
         }
 
-        .testimonials-section {
+        .service i {
+            font-size: 48px;
+            color: #004e89;
+            margin-bottom: 15px;
+        }
+
+        .service h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .service p {
+            font-size: 16px;
+        }
+
+        .call-to-action-section {
             padding: 60px 20px;
-            background-color: #f3f3f3;
+            background: #004e89;
+            color: white;
             text-align: center;
         }
 
-        .testimonial {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .call-to-action-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .call-to-action-section button {
+            background: #ffdf5b;
+            color: #004e89;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .call-to-action-section button:hover {
+            background: #e0b800;
         }
 
         .contact-section {
             padding: 60px 20px;
-            background: linear-gradient(to right, #ffdf5b, #ffb100);
+            background: #f3f3f3;
+        }
+
+        .contact-section h2 {
             text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
         }
 
         .contact-form {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
         .contact-form input,
@@ -174,12 +209,11 @@
             padding: 15px;
             font-size: 16px;
             border-radius: 5px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
         }
 
         .contact-form button {
-            background: #0072ff;
+            background: #004e89;
             color: #fff;
             border: none;
             padding: 15px;
@@ -188,23 +222,29 @@
         }
 
         .contact-form button:hover {
-            background: #005bb5;
+            background: #003566;
         }
 
         .footer {
-            background: #333;
+            background: #004e89;
             color: #fff;
             text-align: center;
             padding: 20px;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: #ffdf5b;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #e0b800;
         }
     </style>
 </head>
@@ -215,79 +255,56 @@
             <div class="logo">ICF-SL</div>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
                 <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
         <div class="hero-section" id="home">
-            <h1>Informatics Consultancy Firm - Sierra Leone</h1>
-            <p>Providing Data-Driven Solutions for Government Agencies and NGOs</p>
-            <button class="cta-button" onclick="scrollToSection('services')">Explore Our Services</button>
+            <h1>Welcome to Informatics Consultancy Firm - Sierra Leone</h1>
+            <p>We provide data-driven solutions to empower government agencies and NGOs in making informed decisions for a better future.</p>
+            <button class="cta-button" onclick="scrollToSection('about')">Learn More</button>
         </div>
     </header>
 
-    <section class="slider-section">
-        <div class="slider">
-            <div class="slide" data-aos="fade-up">
-                <img src="https://via.placeholder.com/1200x400?text=Data+Management+Solutions" alt="Data Management Solutions">
-                <div class="slide-caption">Data Management Solutions</div>
-            </div>
-            <div class="slide" data-aos="fade-up">
-                <img src="https://via.placeholder.com/1200x400?text=Capacity+Building" alt="Capacity Building">
-                <div class="slide-caption">Capacity Building</div>
-            </div>
-            <div class="slide" data-aos="fade-up">
-                <img src="https://via.placeholder.com/1200x400?text=Consultancy+Services" alt="Consultancy Services">
-                <div class="slide-caption">Consultancy Services</div>
-            </div>
+    <section class="about-section" id="about">
+        <h2>About Us</h2>
+        <div class="about-content">
+            <p>Informatics Consultancy Firm - Sierra Leone (ICF-SL) is dedicated to providing comprehensive and sustainable data-driven solutions for governmental and non-governmental organizations. Our mission is to facilitate informed decision-making processes, enhance data management capabilities, and promote data literacy within communities.</p>
+            <p>We believe that data is a vital tool for sustainable development. With our team of skilled professionals, we offer expertise in data management, capacity building, and analytical services that align with our client's objectives for impactful outcomes.</p>
         </div>
     </section>
 
     <section class="services-section" id="services">
         <h2>Our Services</h2>
         <div class="services-container">
-            <div class="service" data-aos="zoom-in">
+            <div class="service" data-aos="fade-up">
+                <i class="fas fa-database"></i>
                 <h3>Data Management</h3>
-                <p>Comprehensive data management for efficient decision-making and quality control.</p>
+                <p>We provide efficient data management solutions to ensure data quality, accessibility, and accuracy.</p>
             </div>
-            <div class="service" data-aos="zoom-in">
+            <div class="service" data-aos="fade-up">
+                <i class="fas fa-chart-line"></i>
                 <h3>Data Analysis</h3>
-                <p>Transforming data into actionable insights to support policy-making.</p>
+                <p>Our data analysis services help organizations make evidence-based decisions by transforming raw data into actionable insights.</p>
             </div>
-            <div class="service" data-aos="zoom-in">
+            <div class="service" data-aos="fade-up">
+                <i class="fas fa-users"></i>
                 <h3>Capacity Building</h3>
-                <p>Training and workshops to strengthen the capabilities of stakeholders in data management.</p>
+                <p>We offer training and workshops to enhance the data management skills of your team and stakeholders.</p>
             </div>
         </div>
     </section>
 
-    <section class="about-section" id="about">
-        <h2>About Us</h2>
-        <p data-aos="fade-left">Informatics Consultancy Firm - Sierra Leone (ICF-SL) is a trusted partner in delivering data-driven solutions for government agencies and NGOs. With a dedicated team of experts, we specialize in helping organizations make informed decisions that impact lives positively.</p>
-    </section>
-
-    <section class="testimonials-section">
-        <h2>What Our Clients Say</h2>
-        <div class="testimonials-slider">
-            <div class="testimonial" data-aos="flip-up">
-                <p>"ICF-SL has been instrumental in helping us streamline our data management processes."</p>
-                <h4>- Government Agency Representative</h4>
-            </div>
-            <div class="testimonial" data-aos="flip-up">
-                <p>"The workshops conducted by ICF-SL were incredibly insightful and practical."</p>
-                <h4>- NGO Project Lead</h4>
-            </div>
-            <div class="testimonial" data-aos="flip-up">
-                <p>"We rely on ICF-SL for all our data analysis needs, and they always deliver exceptional results."</p>
-                <h4>- Partner Organization</h4>
-            </div>
-        </div>
+    <section class="call-to-action-section">
+        <h2>Join Us in Making an Impact</h2>
+        <p>Partner with us and let's create sustainable data solutions for a better tomorrow.</p>
+        <button onclick="scrollToSection('contact')">Get Involved</button>
     </section>
 
     <section class="contact-section" id="contact">
         <h2>Contact Us</h2>
-        <form class="contact-form" data-aos="fade-up">
+        <form class="contact-form">
             <input type="text" placeholder="Name" required>
             <input type="email" placeholder="Email" required>
             <textarea placeholder="Your Message" required></textarea>
@@ -297,26 +314,15 @@
 
     <footer class="footer">
         <p>&copy; 2024 Informatics Consultancy Firm - Sierra Leone. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
     </footer>
 
     <script>
-        $(document).ready(function () {
-            $('.slider').slick({
-                autoplay: true,
-                autoplaySpeed: 3000,
-                dots: true,
-                arrows: false
-            });
-
-            $('.testimonials-slider').slick({
-                autoplay: true,
-                autoplaySpeed: 5000,
-                dots: true,
-                arrows: false,
-                fade: true
-            });
-        });
-
         function scrollToSection(sectionId) {
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
